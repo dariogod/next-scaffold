@@ -5,9 +5,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: kaizen
-      POSTGRES_PASSWORD: kaizen
-      POSTGRES_DB: kaizen
+      POSTGRES_USER: my-app
+      POSTGRES_PASSWORD: my-app
+      POSTGRES_DB: my-app
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
