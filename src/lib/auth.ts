@@ -1,6 +1,13 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { stripe } from "@better-auth/stripe";
+import Stripe from "stripe";
 import { prisma } from "./prisma";
+import { subscriptionPlans } from "./plans";
+
+const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
+  apiVersion: "2026-03-25.dahlia",
+});
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -9,4 +16,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  plugins: [
+    stripe({
+      stripeClient,
+      stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? "",
+      createCustomerOnSignUp: true,
+      subscription: {
+        enabled: true,
+        plans: subscriptionPlans,
+      },
+    }),
+  ],
 });
